@@ -23,9 +23,16 @@ describe('React App', function () {
       browser.visit('/').then(done, done)
     })
 
-    it('should render', function () {
+    it('should render', function (done) {
       expect(browser.statusCode).to.be(200)
       expect(browser.text('title')).to.contain('React App')
+      browser.assert.element('#root')
+      browser.assert.element('.hello')
+      browser.pressButton('Hello')
+      setTimeout(function () {
+        browser.assert.element('p', 'Hello World!')
+        done()
+      }, 20)
     })
   })
 })
