@@ -29,10 +29,15 @@ describe('React App', function () {
       browser.assert.element('#root')
       browser.assert.element('.hello')
       browser.pressButton('Hello')
-      setTimeout(function () {
-        browser.assert.element('p', 'Hello World!')
-        done()
-      }, 20)
+      browser.once('response', (req, res) => {
+        res._stream.once('end', () => {
+          // response.json() is async and needs some time
+          setTimeout(() => {
+            browser.assert.element('p', 'Hello World!')
+            done()
+          }, 5)
+        })
+      })
     })
   })
 })
